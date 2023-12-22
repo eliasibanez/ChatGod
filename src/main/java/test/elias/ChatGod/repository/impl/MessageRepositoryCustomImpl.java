@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 
 import java.util.List;
 
+// Custom methods for MessageRepository
 public class MessageRepositoryCustomImpl implements MessageRepositoryCustom {
     @Autowired
     private EntityManager entityManager;
@@ -24,7 +25,6 @@ public class MessageRepositoryCustomImpl implements MessageRepositoryCustom {
         query.setParameter("receiver", receiver);
         return query.getResultList();
     }
-
 
     @Override
     public List<MessageModel> findRecentConversations(UserModel user) {

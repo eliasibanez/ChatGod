@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,7 +41,20 @@ public class UserModel {
     private UserStatus status; // Online, offline, away, etc.
 
     @Column(name = "last_seen")
+
     private LocalDateTime lastSeen; // Timestamp of the user's last activity
+
+    public UserModel(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+
+        this.bio = "I just downloaded ChatGod!";
+        this.profilePictureUrl = null;
+        this.role = Role.USER;
+        this.status = UserStatus.OFFLINE;
+        this.lastSeen = LocalDateTime.now();
+    }
 
     // Method to update fields with non-null values from another UserModel
     public void updateWith(UserModel other) {

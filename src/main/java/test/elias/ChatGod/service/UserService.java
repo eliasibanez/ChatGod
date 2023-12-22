@@ -1,8 +1,11 @@
 package test.elias.ChatGod.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import test.elias.ChatGod.exception.RegisterException;
 import test.elias.ChatGod.exception.UserNotFoundException;
 import test.elias.ChatGod.model.UserModel;
 import test.elias.ChatGod.repository.UserRepository;
@@ -13,6 +16,7 @@ import java.util.Optional;
 @Service
 public class UserService {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
 
     @Autowired
@@ -32,7 +36,21 @@ public class UserService {
 
     // Create a new user with validation and potential default settings
     public UserModel createUser(UserModel user) {
-        // Add validation logic here
+        if(userRepository.existsById(user.getId())) return null;
+
+        return userRepository.save(user);
+    }
+
+    public UserModel authenticate(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password).orElse(null);
+    }
+    public UserModel register(String username, String password, String email) {
+        logger.debug("Registering user with username: " + username + " and email: " + email);
+        UserModel user = new UserModel(username, email, password);
+        logger.debug("UserModel created: " + user.toString());
+        if(userRepository.findByUsername(username).isPresent() || userRepository.findByEmail(email).isPresent()) throw new RegisterException("Username or email already exists!");
+
+
         return userRepository.save(user);
     }
 
@@ -42,7 +60,6 @@ public class UserService {
         return userRepository.findById(id)
                 .map(existingUser -> {
 
-                    // Update the existing user's fields with userDetails
                     existingUser.updateWith(userDetails);
                     return userRepository.save(existingUser);
                 })

@@ -1,6 +1,10 @@
 package test.elias.ChatGod.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import test.elias.ChatGod.model.GroupModel;
@@ -11,6 +15,7 @@ import test.elias.ChatGod.service.UserService;
 import java.util.Set;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/groups")
 public class GroupController {
 
@@ -24,6 +29,9 @@ public class GroupController {
     }
 
     // Create a new group
+    @ApiResponse(responseCode = "200", description = "Created the group",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = GroupModel.class)) })
     @PostMapping
     public ResponseEntity<GroupModel> createGroup(@RequestBody GroupModel group) {
         GroupModel newGroup = groupService.createGroup(group.getName(), (Set<UserModel>) group.getMembers());
@@ -31,6 +39,9 @@ public class GroupController {
     }
 
     // Add a member to a group
+    @ApiResponse(responseCode = "200", description = "Added the member to the group",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = GroupModel.class)) })
     @PostMapping("/{groupId}/members/{userId}")
     public ResponseEntity<GroupModel> addMemberToGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         UserModel user = userService.getUserById(userId)
@@ -40,6 +51,9 @@ public class GroupController {
     }
 
     // Remove a member from a group
+    @ApiResponse(responseCode = "200", description = "Removed the member from the group",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = GroupModel.class)) })
     @DeleteMapping("/{groupId}/members/{userId}")
     public ResponseEntity<GroupModel> removeMemberFromGroup(@PathVariable Long groupId, @PathVariable Long userId) {
         UserModel user = userService.getUserById(userId)
@@ -49,6 +63,9 @@ public class GroupController {
     }
 
     // Get a specific group by ID
+    @ApiResponse(responseCode = "200", description = "Found the group",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = GroupModel.class)) })
     @GetMapping("/{id}")
     public ResponseEntity<GroupModel> getGroupById(@PathVariable Long id) {
         return groupService.getGroupById(id)
@@ -58,6 +75,7 @@ public class GroupController {
 
     // Delete a group
     @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "200", description = "Deleted the group")
     public ResponseEntity<?> deleteGroup(@PathVariable Long id) {
         groupService.deleteGroup(id);
         return ResponseEntity.ok().build();

@@ -24,4 +24,6 @@ public interface MessageRepositoryCustom {
 
     public List<MessageModel> findAllByGroup(GroupModel group);
 
+
+
 }

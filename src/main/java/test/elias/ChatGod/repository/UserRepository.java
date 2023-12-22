@@ -5,5 +5,7 @@ import org.springframework.stereotype.Repository;
 import test.elias.ChatGod.model.UserModel;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserModel, Long> {
+public interface UserRepository extends JpaRepository<UserModel, Long>, UserRepositoryCustom {
+
+
 }
