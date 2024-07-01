@@ -48,7 +48,7 @@ To run the ChatGod application locally, follow these steps:
     ```sh
     ./mvnw clean install
     ```
-    3. **Run the application like this**
-    4. ```sh
-       ./mvnw spring-boot:run
+ 3.  **Run the application like this**
+    ```sh
+./mvnw spring-boot:run
 ```
